@@ -10,6 +10,7 @@ let sequelize = new Sequelize({dialect: 'sqlite', storage: path.join(__dirname, 
 db['SportHalls'] = require("../modules/sportHall/sportHall.model")(sequelize, DataTypes);
 db['Roles'] = require("../modules/user/role.model")(sequelize, DataTypes);
 db['Users'] = require("../modules/user/user.model")(sequelize, DataTypes);
+db['Bookings'] = require("../modules/sportHall/booking.model")(sequelize, DataTypes);
 
 Object.keys(db).forEach(model => {
     console.log(model, db[model], db[model].associate);

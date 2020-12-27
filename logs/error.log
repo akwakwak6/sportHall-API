@@ -1,0 +1,3 @@
+[init db] 27/12/2020, 13:24:09 => ERROR: "error in insert roles or users from setting, probably error in db.config.js"
+[init db] 27/12/2020, 13:28:09 => ERROR: "error in insert roles or users from setting, probably error in db.config.js"
+[init db] 27/12/2020, 13:31:24 => ERROR: "error in insert roles or users from setting, probably error in db.config.js"

@@ -8,9 +8,6 @@ const initDB = require("./models/initDb.model")
 
 db.sequelize.sync().then( _ => initDB(db) );
 
-//put role to user id
-//config file => . . . 
-
 //booking table
 //add booking
 //add sport hall

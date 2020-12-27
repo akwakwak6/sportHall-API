@@ -15,10 +15,13 @@ class Logger {
         console.debug(chalk.yellow(log));
     }
 
-    error(ctx, msg) {
+    error(ctx, msg, stop = false) {
         const log = `[${ctx}] ${Logger.DateTimeFormat.format(new Date())} => ERROR: ${JSON.stringify(msg, null, "\t")}`;
         console.error(chalk.red(log));
-        fs.appendFile(path.join(__dirname, "logs", "error.log"), `${log}\n`).then(_ => this.info(Logger.name, `Error logs update`));
+        fs.appendFile(path.join(__dirname,"..", "logs", "error.log"), `${log}\n`).then(_ => {
+            this.info(Logger.name, `Error logs update`)
+            if(stop)    throw msg
+        });
     }
 }
 
