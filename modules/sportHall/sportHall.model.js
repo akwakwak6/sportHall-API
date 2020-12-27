@@ -3,7 +3,8 @@ const { Model, DataTypes } = require('sequelize');
 module.exports = function(sequelize, Datatypes) {
     class SportHall extends Model {
         static associate(models) {
-            SportHall.hasMany(models.Bookings)
+            SportHall.hasMany(models.Bookings , { foreignKey: { allowNull: false} })
+            SportHall.hasMany(models.Pictures , { foreignKey: { allowNull: false} })
         }
     }
 

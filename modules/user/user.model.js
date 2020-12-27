@@ -4,7 +4,7 @@ module.exports = function(sequelize, Datatypes) {
     class User extends Model {
         static associate(models) {
             User.belongsToMany(models.Roles, {through: 'User_Roles', timestamps: false,as: "Roles"})
-            User.hasMany(models.Bookings)
+            User.hasMany(models.Bookings , { foreignKey: { allowNull: false} })
         }
     }
 

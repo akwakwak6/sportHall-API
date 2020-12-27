@@ -8,13 +8,6 @@ const initDB = require("./models/initDb.model")
 
 db.sequelize.sync().then( _ => initDB(db) );
 
-//booking table
-//add booking
-//add sport hall
-//get sport hall ID
-//get booking for sport hall
-
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
