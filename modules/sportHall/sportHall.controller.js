@@ -17,6 +17,16 @@ class SprtHllController {
             .catch(err => res.json(err));
     }
 
+    setMainPicture({body:{sportHallId,pictureId}},res){
+        db.SportHalls.findByPk(sportHallId)
+        .then( sh => {
+            sh.idMainPicture = pictureId
+            return sh.save()
+        })
+        .then(_ => res.json())
+        .catch(err => res.status(452).json(err))//TODO put better statu
+    }
+
     getById({params: {id}},res){
         db.SportHalls.findByPk(id,
             { include:[
