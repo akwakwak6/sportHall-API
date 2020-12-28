@@ -1,5 +1,7 @@
 const { SportHalls } = require('../../models');
 const db = require('../../models');
+const fs = require('fs')
+const {pictureFolder} = require('../../config/db.config')
 
 class SprtHllController {
 
@@ -16,13 +18,17 @@ class SprtHllController {
     }
 
     getById({params: {id}},res){
-        db.SportHalls.findByPk(id,{include:{model:db.Bookings,attributes:["id","start","end","message","payed"]}})
+        db.SportHalls.findByPk(id,
+            { include:[
+                {model:db.Bookings,attributes:["id","start","end","message","payed"]},
+                {model:db.Pictures,attributes:["id"]}
+            ]})
         .then( sh => res.json(sh) )
         .catch(err => res.json(err))
     }
 
     addBooking(req,res){
-        //TODO check date correct - start is before end - . . .
+    //TODO check date correct - start is before end - 3D > diff > 1D - if default Time of sportHall . . .
         /*var start = new Date(req.body.start); 
         console.log("-----> ",start)
         req.body.start = start.setHours(16)*/
@@ -33,7 +39,48 @@ class SprtHllController {
     }
 
     savePicture(req,res){
-        res.json(req.body)
+        db.Pictures.create({SportHallId:req.params.id,fileName:req.file.filename,name:req.file.originalname})
+        .then(_=> res.json({ msg: 'Upload Works' }))
+    }
+
+    savePictures(req,res){
+
+        const promises = []
+        req.files.forEach( (f) => {
+            promises.push( 
+                db.Pictures.create({SportHallId:req.params.id,fileName:f.filename,name:f.originalname})
+             )
+        } )
+        Promise.all(promises).then(_=> res.json({ msg: 'Upload Works' }))
+
+    }
+
+    getPicture({params:{id}},res){
+        db.Pictures.findByPk(id)
+        .then( p => {
+            const path = pictureFolder + "/" + p.fileName
+            res.download(path,p.name,(err)=> {
+                res.json(err)
+            })
+        }).catch(err => res.json(err))
+    }
+
+
+    removePicture({body:{pictureId}},res){
+
+        db.Pictures.findByPk(pictureId)
+        .then( p => {
+            const path = pictureFolder + "/" + p.name
+            fs.unlink(path,(err)=> {
+                db.Pictures.destroy( {where:{id:pictureId}})
+                if(err){
+                    res.json(err)//TODO !!! send error statu EVERY WHERE !!!
+                    return
+                }
+                res.json({ msg: 'removed' });
+            })
+        }).catch(err => res.json(err))
+        
     }
 
 

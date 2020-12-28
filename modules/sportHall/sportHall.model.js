@@ -5,6 +5,7 @@ module.exports = function(sequelize, Datatypes) {
         static associate(models) {
             SportHall.hasMany(models.Bookings , { foreignKey: { allowNull: false} })
             SportHall.hasMany(models.Pictures , { foreignKey: { allowNull: false} })
+            SportHall.hasOne(models.Pictures , { foreignKey: { allowNull: true, name:"mainPictureId"} })
         }
     }
 

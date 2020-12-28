@@ -11,7 +11,9 @@ const configMySqlDB = {
       acquire: 30000,
       idle: 10000
     }
-};
+}
+
+const pictureFolder = "pictures/"
 
 // if roles tab is empty => creat roles
 const configRoles = [
@@ -25,4 +27,4 @@ const configUsers = [
 ]
 
 
-module.exports = { configMySqlDB,configRoles,configUsers }
+module.exports = { configMySqlDB,configRoles,configUsers,pictureFolder }

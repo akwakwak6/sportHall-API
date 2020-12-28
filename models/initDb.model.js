@@ -7,7 +7,7 @@ const {configRoles,configUsers} = require('../config/db.config')
 module.exports = () => { //TODO use sequelize-cli
     console.log("Database was synchronized")
 
-
+    //TODO use bulkCreate (several rows in once time) 
     db.Roles.findAndCountAll().then( c => {// if role table is empty => add role and admin user
         if(c.count === 0){
             const promiseArray = []

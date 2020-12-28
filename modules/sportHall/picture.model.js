@@ -8,8 +8,8 @@ module.exports = function(sequelize, Datatypes) {
     }
 
     Picture.init({
-        description : {type: DataTypes.STRING, allowNull:true},
         name : {type: DataTypes.STRING, allowNull:false},
+        fileName : {type: DataTypes.STRING, allowNull:false},
     }, {
         sequelize,
         modelName: 'Pictures',

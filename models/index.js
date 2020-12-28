@@ -4,6 +4,7 @@ const path = require('path');
 
 const db = {};
 
+//TODO use db.config
 let sequelize = new Sequelize({dialect: 'sqlite', storage: path.join(__dirname, '..', 'db', 'db.sqlite3')});
 
 
