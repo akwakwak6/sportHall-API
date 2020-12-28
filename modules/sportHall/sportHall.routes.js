@@ -9,7 +9,7 @@ router.get('/', SpHaCtrl.getAll);
 router.get('/:id([0-9]+)', SpHaCtrl.getById);
 router.post('/', SpHaCtrl.addSportHall);
 router.post('/mainPicture', SpHaCtrl.setMainPicture);
-router.post('/booking', hasToken , SpHaCtrl.addBooking);
+router.post('/booking' , hasToken , SpHaCtrl.addBooking);
 router.post('/:id([0-9]+)/addpicture', savePicture ,SpHaCtrl.savePicture);
 router.post('/:id([0-9]+)/addSeveralpictures', savePictures ,SpHaCtrl.savePictures);
 router.post('/rempicture', SpHaCtrl.removePicture);

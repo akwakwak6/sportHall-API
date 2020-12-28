@@ -1,7 +1,14 @@
 const { SportHalls } = require('../../models');
 const db = require('../../models');
 const fs = require('fs')
-const {pictureFolder} = require('../../config/db.config')
+const {pictureFolder} = require('../../config/db.config');
+const { Op } = require("sequelize");
+
+Date.prototype.isValid = function () {
+    // An invalid date object returns NaN for getTime() and NaN is the only
+    // object not strictly equal to itself.
+    return this.getTime() === this.getTime();
+}; 
 
 class SprtHllController {
 
@@ -27,25 +34,60 @@ class SprtHllController {
         .catch(err => res.status(452).json(err))//TODO put better statu
     }
 
-    getById({params: {id}},res){
-        db.SportHalls.findByPk(id,
+    getById(req,res){
+
+        console.log("get ",req.params.id)
+
+        //default all booking of this sport hall
+        const bookingInclude = {model:db.Bookings,attributes:["id","start","end","message","payed"]}
+
+        //If query start & end & are valid date => add filter only booking in the range bettween start & stop 
+        if( req.query.start != undefined && req.query.end != undefined ){
+            const startL = new Date(req.query.start)
+            const end = new Date(req.query.end)
+            if (startL.isValid() && end.isValid() && (startL < end)){
+                bookingInclude.where = {start:{[Op.gte]: startL},end:{[Op.lte]: end}}
+                bookingInclude.required = false
+            }
+        }
+
+
+        db.SportHalls.findByPk(req.params.id,
             { include:[
-                {model:db.Bookings,attributes:["id","start","end","message","payed"]},
+                bookingInclude,
                 {model:db.Pictures,attributes:["id"]}
             ]})
         .then( sh => res.json(sh) )
         .catch(err => res.json(err))
     }
 
-    addBooking(req,res){
-    //TODO check date correct - start is before end - 3D > diff > 1D - if default Time of sportHall . . .
-        /*var start = new Date(req.body.start); 
-        console.log("-----> ",start)
-        req.body.start = start.setHours(16)*/
+    addBooking({body,token},res){
+        const start = new Date(body.start)
+        const end = new Date(body.end)
+        const now = new Date()
 
-        db.Bookings.create({...req.body,UserId:req.token.id})
-        .then(b => res.json() )
-        .catch(err => res.json(err))
+        console.log("now ",now)
+        // check dates => valides?, start before end? after now ?
+        if (!start.isValid() || !end.isValid() || (start >= end) || (now > start) ) {
+            res.status(409).json({msg:"invalid date"}) 
+            return
+        }
+        //get period of booking in days
+        const days = (end - start) / (60 * 60 * 24 * 1000)
+        //TODO set max periode of booking in setting or in DB
+        if( days > 10 ){
+            res.status(409).json({msg:"invalid date"}) 
+            return
+        }
+
+        const data = {...body}
+        data.start = start
+        data.end = end
+
+        db.Bookings.create({...data,UserId:token.id})
+        .then(_ => res.json() )
+        .catch(err => res.status(405).json(err))
+        
     }
 
     savePicture(req,res){

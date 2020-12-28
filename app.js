@@ -7,9 +7,6 @@ const {UserRouter} = require("./modules/user");
 const initDB = require("./models/initDb.model")
 
 //TODO plan
-// => mainPictue in sportHall 
-// => setMainPicture in sportHall
-// => check time start and stop for booking, in the future, more than 1 hour less than 3D, start before end . . . 
 // => getSportHAll by id with booking date range
 // => confirm booking payd
 // => log user who confirm payed
