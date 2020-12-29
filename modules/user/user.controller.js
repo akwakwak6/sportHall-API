@@ -40,6 +40,12 @@ class UserController {
         .catch(err => res.status(400).json(err))
     }
 
+    getUserId({params:{id}},res){
+        db.Users.findByPk(id , {include:[ {model:db.Bookings},{model:db.LogConfirms}]} ) //TODO add roles => how ? it doesn't works ? ?  ?
+        .then(u => res.json(u))
+        .catch(err => res.status(400).json(err))
+    }
+
 }
 
 module.exports = new UserController();

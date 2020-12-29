@@ -8,7 +8,6 @@ const initDB = require("./models/initDb.model")
 
 //TODO plan
 
-// => log user who confirm payed
 // => get this log => this log for bookig id
 // => res.statu = X if error (catch) EVERY WHERE
 // => 
