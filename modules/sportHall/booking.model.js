@@ -1,10 +1,12 @@
 const { Model, DataTypes } = require('sequelize');
+const db = require('../../models');
 
 module.exports = function(sequelize, Datatypes) {
     class Booking extends Model {
         static associate(models) {
             Booking.belongsTo(models.SportHalls , { foreignKey: { allowNull: false} })
             Booking.belongsTo(models.Users , { foreignKey: { allowNull: false} })
+            Booking.hasMany(models.LogConfirms , { foreignKey: { allowNull: false} })
         }
     }
 
@@ -17,6 +19,12 @@ module.exports = function(sequelize, Datatypes) {
         sequelize,
         modelName: 'Bookings'
     });
+
+    
+    Booking.afterUpdate( async (booking, options) => {
+        if(booking.dataValues.payed === booking._previousDataValues.payed)  return        
+        booking.createLogConfirm({hasConfirmed:booking.dataValues.payed,UserId:options.confirmerID})
+    })
 
     return Booking;
 }

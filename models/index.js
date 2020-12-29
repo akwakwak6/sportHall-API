@@ -12,6 +12,7 @@ db['SportHalls'] = require("../modules/sportHall/sportHall.model")(sequelize, Da
 db['Roles'] = require("../modules/user/role.model")(sequelize, DataTypes);
 db['Users'] = require("../modules/user/user.model")(sequelize, DataTypes);
 db['Bookings'] = require("../modules/sportHall/booking.model")(sequelize, DataTypes);
+db['LogConfirms'] = require("../modules/sportHall/logConfirm.model")(sequelize, DataTypes);
 db['Pictures'] = require("../modules/sportHall/picture.model")(sequelize, DataTypes);
 
 Object.keys(db).forEach(model => {

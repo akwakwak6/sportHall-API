@@ -7,8 +7,7 @@ const {UserRouter} = require("./modules/user");
 const initDB = require("./models/initDb.model")
 
 //TODO plan
-// => getSportHAll by id with booking date range
-// => confirm booking payd
+
 // => log user who confirm payed
 // => get this log => this log for bookig id
 // => res.statu = X if error (catch) EVERY WHERE

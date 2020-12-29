@@ -1,4 +1,3 @@
-const { SportHalls } = require('../../models');
 const db = require('../../models');
 const fs = require('fs')
 const {pictureFolder} = require('../../config/db.config');
@@ -25,13 +24,11 @@ class SprtHllController {
     }
 
     setMainPicture({body:{sportHallId,pictureId}},res){
-        db.SportHalls.findByPk(sportHallId)
-        .then( sh => {
-            sh.idMainPicture = pictureId
-            return sh.save()
-        })
+
+        db.SportHalls.update({idMainPicture:pictureId},{where:{id:sportHallId}})
         .then(_ => res.json())
-        .catch(err => res.status(452).json(err))//TODO put better statu
+        .catch(err => res.status(452).json(err))
+
     }
 
     getById(req,res){
@@ -66,7 +63,6 @@ class SprtHllController {
         const end = new Date(body.end)
         const now = new Date()
 
-        console.log("now ",now)
         // check dates => valides?, start before end? after now ?
         if (!start.isValid() || !end.isValid() || (start >= end) || (now > start) ) {
             res.status(409).json({msg:"invalid date"}) 
@@ -133,6 +129,12 @@ class SprtHllController {
             })
         }).catch(err => res.json(err))
         
+    }
+
+    confirmBooking(req,res){
+        db.Bookings.update({payed:req.body.confirm},{where:{id:req.body.bookingId},individualHooks: true,confirmerID:req.token.id})
+        .then( _ => res.json())
+        .catch(err => res.json(err))
     }
 
 
