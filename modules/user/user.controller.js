@@ -35,13 +35,13 @@ class UserController {
     }
 
     getAllUser(req,res){
-        db.Users.findAll({ attributes:["id","name","mail"], include:'Roles' })//TODO add attribut in roles tab
+        db.Users.findAll({ attributes:["id","name","isActive"], include:'Roles' })//TODO add attribut in roles tab
         .then(u => res.json(u))
         .catch(err => res.status(400).json(err))
     }
 
     getUserId({params:{id}},res){
-        db.Users.findByPk(id , {include:[ {model:db.Bookings},{model:db.LogConfirms}]} ) //TODO add roles => how ? it doesn't works ? ?  ?
+        db.Users.findByPk(id , {attributes:["id","name","mail"],include:[ {model:db.Bookings},{model:db.LogConfirms},"Roles"]} ) //TODO add attribut in roles tab
         .then(u => res.json(u))
         .catch(err => res.status(400).json(err))
     }

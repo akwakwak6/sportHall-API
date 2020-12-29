@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('sequelize');
+const { Model } = require('sequelize');
 
 module.exports = function(sequelize, Datatypes) {
     class SportHall extends Model {

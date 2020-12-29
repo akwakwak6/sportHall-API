@@ -1,5 +1,4 @@
 const { Model, DataTypes } = require('sequelize');
-const db = require('../../models');
 
 module.exports = function(sequelize, Datatypes) {
     class Booking extends Model {
