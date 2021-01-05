@@ -3,7 +3,7 @@ const { Model } = require('sequelize');
 module.exports = function(sequelize, Datatypes) {
     class User extends Model {
         static associate(models) {
-            User.belongsToMany(models.Roles, {through:models.UserRoles, as: "Roles"})
+            User.belongsToMany(models.Roles, {through:"UserRoles", as: "Roles"})
             User.hasMany(models.Bookings , { foreignKey: { allowNull: false} })
             User.hasMany(models.LogConfirms , { foreignKey: { allowNull: false} })
         }
