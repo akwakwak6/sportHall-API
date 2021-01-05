@@ -9,7 +9,7 @@ const savePicture = (req,res,next) => {
     upload(req,res,(err) => {
         //TODO check if id is good ; req.params.id
         if(err){
-            res.json(err)
+            res.status(400).json(err)
             return
         }
         next()
@@ -22,7 +22,7 @@ const savePictures = (req,res,next) => {
     uploadArray(req,res,(err) => {
         //TODO check if id is good ; req.params.id
         if(err){
-            res.json(err)
+            res.status(400).json(err)
             return
         }
         next()

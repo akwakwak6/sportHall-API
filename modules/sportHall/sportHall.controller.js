@@ -12,28 +12,24 @@ Date.prototype.isValid = function () {
 class SprtHllController {
 
     getAll( req,res){
-        db.SportHalls.findAll().then( (data) => {
-            res.json(data);
-        } ).catch(err => res.json(err));
+        db.SportHalls.findAll()
+            .then( data => res.json(data) )
+            .catch(err => res.status(400).json(err))
     }
 
     addSportHall({body},res){
         db.SportHalls.create({...body})
-            .then(user => res.status(203).json(user))
-            .catch(err => res.json(err));
+            .then(user => res.json(user))
+            .catch(err => res.status(400).json(err))
     }
 
     setMainPicture({body:{sportHallId,pictureId}},res){
-
         db.SportHalls.update({idMainPicture:pictureId},{where:{id:sportHallId}})
-        .then(_ => res.json())
-        .catch(err => res.status(452).json(err))
-
+            .then(_ => res.json())
+            .catch(err => res.status(400).json(err))
     }
 
     getById(req,res){
-
-        console.log("get ",req.params.id)
 
         //default all booking of this sport hall
         const bookingInclude = {model:db.Bookings,attributes:["id","start","end","message","payed"]}
@@ -55,7 +51,7 @@ class SprtHllController {
                 {model:db.Pictures,attributes:["id"]}
             ]})
         .then( sh => res.json(sh) )
-        .catch(err => res.json(err))
+        .catch(err => res.status(400).json(err))
     }
 
     addBooking({body,token},res){
@@ -65,30 +61,32 @@ class SprtHllController {
 
         // check dates => valides?, start before end? after now ?
         if (!start.isValid() || !end.isValid() || (start >= end) || (now > start) ) {
-            res.status(409).json({msg:"invalid date"}) 
+            res.status(400).json({msg:"invalid date"}) 
             return
         }
         //get period of booking in days
         const days = (end - start) / (60 * 60 * 24 * 1000)
         //TODO set max periode of booking in setting or in DB
         if( days > 10 ){
-            res.status(409).json({msg:"invalid date"}) 
+            res.status(400).json({msg:"invalid date"}) 
             return
         }
 
+        //TODO check data = body is useless,
         const data = {...body}
         data.start = start
         data.end = end
 
         db.Bookings.create({...data,UserId:token.id})
-        .then(_ => res.json() )
-        .catch(err => res.status(405).json(err))
+            .then(_ => res.json() )
+            .catch(err => res.status(400).json(err))
         
     }
 
     savePicture(req,res){
         db.Pictures.create({SportHallId:req.params.id,fileName:req.file.filename,name:req.file.originalname})
-        .then(_=> res.json({ msg: 'Upload Works' }))
+            .then(_=> res.json())
+            .catch(err => res.status(400).json(err))
     }
 
     savePictures(req,res){
@@ -99,7 +97,9 @@ class SprtHllController {
                 db.Pictures.create({SportHallId:req.params.id,fileName:f.filename,name:f.originalname})
              )
         } )
-        Promise.all(promises).then(_=> res.json({ msg: 'Upload Works' }))
+        Promise.all(promises)
+            .then(_=> res.json())
+            .catch(err => res.status(400).json(err))
 
     }
 
@@ -108,9 +108,11 @@ class SprtHllController {
         .then( p => {
             const path = pictureFolder + "/" + p.fileName
             res.download(path,p.name,(err)=> {
-                res.json(err)
+                if(err) res.status(400).json(err)
+                else res.json()
             })
-        }).catch(err => res.json(err))
+        })
+        .catch(err => res.status(400).json(err))
     }
 
 
@@ -121,20 +123,18 @@ class SprtHllController {
             const path = pictureFolder + "/" + p.name
             fs.unlink(path,(err)=> {
                 db.Pictures.destroy( {where:{id:pictureId}})
-                if(err){
-                    res.json(err)//TODO !!! send error statu EVERY WHERE !!!
-                    return
-                }
-                res.json({ msg: 'removed' });
+                if(err) res.status(400).json(err)
+                else res.json()
             })
-        }).catch(err => res.json(err))
+        })
+        .catch(err => res.status(400).json(err))
         
     }
 
     confirmBooking(req,res){
         db.Bookings.update({payed:req.body.confirm},{where:{id:req.body.bookingId},individualHooks: true,confirmerID:req.token.id})
         .then( _ => res.json())
-        .catch(err => res.json(err))
+        .catch(err => res.status(400).json(err))
     }
 
 

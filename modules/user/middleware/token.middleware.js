@@ -33,12 +33,12 @@ const hasRole = (...roles) => {
                 next()
                 return
             }
-            roles.forEach(r => {
-                if( req.token.roles.includes(r) ){
+            for (let i = 0; i < roles.length; i++) {
+                if( req.token.roles.includes(roles[i]) ){
                     next()
                     return
                 }
-            })
+            }
             res.status(403).json();
         })
 

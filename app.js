@@ -6,11 +6,6 @@ const {SportHallRouter} = require("./modules/sportHall");
 const {UserRouter} = require("./modules/user");
 const initDB = require("./models/initDb.model")
 
-//TODO plan
-
-// => res.statu = X if error (catch) EVERY WHERE
-// => 
-
 db.sequelize.sync().then( _ => initDB(db) );
 
 app.use(bodyParser.urlencoded({ extended: true }));
