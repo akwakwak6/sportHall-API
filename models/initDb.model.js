@@ -21,7 +21,7 @@ module.exports = () => { //TODO use sequelize-cli
                 .then(u => u.setRoles(1)))
             })
             Promise.all(promiseArray)
-            .then(_=> logger.info("init db","inserted roles and users from setting"))//TODO use logger
+            .then(_=> logger.info("init db","inserted roles and users from setting"))
             .catch(_=> {
                 logger.error("init db","error in insert roles or users from setting, probably error in db.config.js",true)
             })

@@ -1,6 +1,10 @@
 const db = require('../../models')
 const {auth} = require('../../utils')
 
+const getUserDate = (id) => {
+    return db.Users.findByPk(id , {attributes:["id","name","mail"],include:[ {model:db.Bookings},{model:db.LogConfirms},"Roles"]} )
+}
+
 
 class UserController {
 
@@ -17,7 +21,9 @@ class UserController {
     login({body: {mail, password} }, res){//TODO check if isActive => X Error => lock
         db.Users.findOne( { where:{mail} , attributes:["id","name","password"], include:'Roles' } )
         .then(u => {return auth.checkUser(u,password)})
-        .then(u => res.json({token:auth.geneToken(u)}))
+        .then(u => {
+            getUserDate(u.id).then( userData => res.json({token:auth.geneToken(u),user:userData})  )
+        })
         .catch(err => res.status(400).json(err))
     }
 

@@ -11,7 +11,7 @@ module.exports = function(sequelize, Datatypes) {
     SportHall.init({
         name: {type: Datatypes.STRING, allowNull: false},
         address: {type: Datatypes.STRING, allowNull: false},
-        idMainPicture: {type: Datatypes.INTEGER, allowNull: true}//no way to creat asssociation, sportHall -> pictures -> sportHall
+        mainPicture: {type: Datatypes.STRING, allowNull: false}
     }, {
         sequelize,
         modelName: 'SportHalls',
