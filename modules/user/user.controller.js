@@ -53,8 +53,8 @@ class UserController {
     }
 
     getUserId({params:{id}},res){
-        db.Users.findByPk(id , {attributes:["id","name","mail"],include:[ {model:db.Bookings},{model:db.LogConfirms},"Roles"]} ) //TODO add attribut in roles tab
-        .then(u => res.json({username: u.username, roles: u.Roles}))
+        db.Users.findByPk(id , {attributes:["id","name","mail"],include:[{model:db.Roles, as:"Roles", through: { attributes: [] } } , {model:db.Bookings},{model:db.LogConfirms}]} )
+        .then(u => res.json(u))//res.json({username: u.username, roles: u.Roles})
         .catch(err => res.status(400).json(err))
     }
 

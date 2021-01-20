@@ -28,7 +28,7 @@ class Auth {
         if( u.Roles === undefined ) u.Roles = []
         const user = {id:u.id,name:u.name}
         user.roles = u.Roles.map(r => r.name)
-        return jwt.sign(user, accessTokenSecret, { expiresIn: '1h' });
+        return 'Bearer '+jwt.sign(user, accessTokenSecret, { expiresIn: '1h' });
     }
 
     getPayLoad = (token) => {
