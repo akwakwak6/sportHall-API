@@ -14,7 +14,10 @@ class UserController {
                 user.password = pw
                 return db.Users.create({...user})
             })
-        .then(u => res.json( {token:auth.geneToken(u)} ))
+        //.then(u => res.json( {token:auth.geneToken(u)} ))
+        .then(u => {
+            getUserDate(u.id).then( userData => res.json({token:auth.geneToken(u),user:userData})  )
+        })
         .catch(err => res.status(400).json(err))
     }
 
