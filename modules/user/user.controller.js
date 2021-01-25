@@ -41,7 +41,7 @@ class UserController {
         db.Users.findByPk(userId)
         .then(u => {
             if(enable)
-                return u.setRoles(roleId)
+                return u.addRoles(roleId)
             else
                 return u.removeRoles(roleId)
         })

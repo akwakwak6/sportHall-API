@@ -19,7 +19,7 @@ module.exports = function(sequelize, Datatypes) {
         modelName: 'Bookings'
     });
 
-    
+    //add userID when confirm or cancel event
     Booking.afterUpdate( async (booking, options) => {
         if(booking.dataValues.payed === booking._previousDataValues.payed)  return        
         booking.createLogConfirm({hasConfirmed:booking.dataValues.payed,UserId:options.confirmerID})

@@ -115,6 +115,15 @@ class SprtHllController {
         .catch(err => res.status(400).json(err))
     }
 
+    getEvent({params:{id}},res){
+
+        db.Bookings.findByPk(id,{ include:[
+            {model:db.Users,attributes:["name","mail"]}
+        ]})
+        .then(b => res.json(b)  )
+        .catch(err => res.status(400).json(err))
+    }
+
 
     removePicture({body:{pictureId}},res){
 
@@ -132,6 +141,7 @@ class SprtHllController {
     }
 
     confirmBooking(req,res){
+        // fire hook => if payed has changed => add in log table user who confirm/cancel
         db.Bookings.update({payed:req.body.confirm},{where:{id:req.body.bookingId},individualHooks: true,confirmerID:req.token.id})
         .then( _ => res.json())
         .catch(err => res.status(400).json(err))
