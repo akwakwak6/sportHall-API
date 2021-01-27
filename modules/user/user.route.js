@@ -4,7 +4,7 @@ const {getPayloadOrUndefined,hasToken,hasRole} = require('./middleware/token.mid
 
 const router = express.Router();
 
-//TODO set middleware
+//TODO set middleware 
 router.get('/',hasRole("admin"), UserController.getAllUser);
 router.get('/:id([0-9]+)', UserController.getUserId);
 router.post('/role',hasRole("admin"), UserController.setRole);
